@@ -1,0 +1,69 @@
+---
+name: bundle
+on:
+  push:
+    tags:
+      - '*'
+
+env:
+  UV_LOCKED: 1
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build dist files
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+      - name: build dist
+        run: uv build
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: artifacts
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    name: create Github release
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: create the release
+        run: gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag --notes ""
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  publish:
+    name: release to pypi
+    needs: build
+    runs-on: ubuntu-24.04
+
+    environment:
+      name: pypi-release
+      url: https://pypi.org/project/flask-wtforms-htmx/
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: artifacts
+          path: dist
+
+      - name: Push build artifacts to TestPyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+      - name: Push build artifacts to PyPI
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3

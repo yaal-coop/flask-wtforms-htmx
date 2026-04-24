@@ -1,0 +1,125 @@
+---
+name: tests
+on:
+  push:
+    branches:
+      - main
+      - '*.*.*'
+  pull_request:
+    branches:
+      - main
+      - '*.*.*'
+
+env:
+  UV_LOCKED: 1
+  UV_PYTHON_PREFERENCE: only-managed
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: py${{ matrix.python }} unit tests
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python:
+          - '3.15'
+          - '3.14'
+          - '3.13'
+          - '3.12'
+          - '3.11'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Run tests
+        run: uv run --group test pytest --showlocals
+
+  coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+          python-version: "3.15"
+          enable-cache: true
+      - name: Run tests
+        run: uv run --group test pytest --cov
+
+  minversions:
+    name: minimum dependency versions
+    runs-on: ubuntu-24.04
+    env:
+      UV_RESOLUTION: lowest-direct
+      UV_LOCKED: 0
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+          python-version: "3.11"
+          enable-cache: true
+      - name: Install minimum dependencies
+        run: uv sync --group test
+      - name: Run tests
+        run: uv run --no-sync pytest --showlocals
+
+  style:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+          python-version: "3.15"
+          enable-cache: true
+      - name: Run style checks
+        run: uv run --group dev prek run --all-files --show-diff-on-failure
+
+  doc:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.4"
+          python-version: "3.15"
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --group doc
+      - name: Build the documentation
+        run: uv run --no-sync sphinx-build -W -b dirhtml docs build/sphinx/html
+
+  all-checks:
+    if: always()
+    needs: [tests, coverage, minversions, style, doc]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fail if a needed job did not succeed
+        if: >-
+          contains(needs.*.result, 'failure')
+          || contains(needs.*.result, 'cancelled')
+          || contains(needs.*.result, 'skipped')
+        run: exit 1
