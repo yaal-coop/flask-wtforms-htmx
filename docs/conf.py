@@ -17,15 +17,12 @@ extensions = [
     "pallets_sphinx_themes",
 ]
 
-# Intersphinx is used to cross-link into the wtforms-htmx core docs.
-# Cross-refs resolve once both projects publish to RTD; during local
-# development, unresolved refs emit warnings but don't fail the build.
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "flask": ("https://flask.palletsprojects.com/en/stable/", None),
     "flask-wtf": ("https://flask-wtf.readthedocs.io/en/latest/", None),
     "wtforms": ("https://wtforms.readthedocs.io/en/stable/", None),
-    "wtforms-htmx": ("https://wtforms-htmx.readthedocs.io/en/latest/", None),
+    "wtforms-htmx": ("https://wtforms-htmx.readthedocs.io/en/stable/", None),
 }
 
 # Same shortcuts as wtforms-htmx: htmx has no objects.inv, so we

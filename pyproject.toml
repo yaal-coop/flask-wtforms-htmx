@@ -44,10 +44,6 @@ build-backend = "uv_build"
 [tool.uv]
 required-version = ">=0.13.1"
 
-# TEMPORARY: wtforms-htmx is not on PyPI yet.
-[tool.uv.sources]
-wtforms-htmx = { path = "../wtforms-htmx", editable = true }
-
 [dependency-groups]
 doc = [
     "pallets-sphinx-themes>=2.5.0",
@@ -131,7 +127,6 @@ ignore = [
     "RUF003",
     "TRY003", # raise-vanilla-args — dedicated exception classes would be overkill here
 ]
-
 
 [tool.ruff.lint.isort]
 force-single-line = true
