@@ -58,8 +58,7 @@ class HtmxFlaskForm(HtmxFormMixin, FlaskForm):
         if self.submitter is not None and self.htmx_submit_attrs(self.submitter):
             return True
 
-        headers = request.headers if has_request_context() else {}
-        return "HX-Request" in headers and "HX-Boosted" not in headers
+        return "HX-Request" in request.headers and "HX-Boosted" not in request.headers
 
     def validate_on_submit(
         self, extra_validators=None, *, submitter: Any = None
