@@ -4,6 +4,6 @@ Changes
 Version 0.1.0
 -------------
 
-Unreleased
+Released 2026-10-23
 
-- Initial commit.
+- Initial release.
