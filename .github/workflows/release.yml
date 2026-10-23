@@ -38,6 +38,7 @@ jobs:
 
   release:
     name: create Github release
+    needs: publish
     runs-on: ubuntu-24.04
     permissions:
       contents: write  # create the GitHub release
@@ -63,11 +64,6 @@ jobs:
         with:
           name: artifacts
           path: dist
-
-      - name: Push build artifacts to TestPyPI
-        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
-        with:
-          repository-url: https://test.pypi.org/legacy/
 
       - name: Push build artifacts to PyPI
         uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
