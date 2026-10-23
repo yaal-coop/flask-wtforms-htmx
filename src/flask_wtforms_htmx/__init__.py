@@ -1,4 +1,4 @@
-"""Flask adapter for wtforms-htmx."""
+"""A drop-in FlaskForm that brings wtforms-htmx to Flask-WTF."""
 
 from __future__ import annotations
 

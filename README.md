@@ -1,6 +1,8 @@
 # flask-wtforms-htmx
 
-Flask adapter for [wtforms-htmx](https://github.com/yaal-coop/wtforms-htmx).
+A drop-in `FlaskForm` that brings
+[wtforms-htmx](https://github.com/yaal-coop/wtforms-htmx) to
+[Flask-WTF](https://flask-wtf.readthedocs.io/).
 
 **Status: alpha, work in progress.**
 

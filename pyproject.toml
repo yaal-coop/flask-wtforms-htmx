@@ -1,7 +1,7 @@
 [project]
 name = "flask-wtforms-htmx"
 version = "0.1.0.dev0"
-description = "Flask adapter for wtforms-htmx"
+description = "A drop-in FlaskForm that brings wtforms-htmx to Flask-WTF."
 readme = "README.md"
 license = "BSD-3-Clause"
 license-files = ["LICENSE.rst"]

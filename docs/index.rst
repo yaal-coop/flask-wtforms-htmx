@@ -1,7 +1,9 @@
 flask-wtforms-htmx
 ==================
 
-Flask adapter for :external+wtforms-htmx:doc:`wtforms-htmx <index>`.
+A drop-in :class:`~flask_wtf.FlaskForm` that brings
+:external+wtforms-htmx:doc:`wtforms-htmx <index>` to
+:external+flask-wtf:doc:`Flask-WTF <index>`.
 :class:`~flask_wtforms_htmx.HtmxFlaskForm` replaces
 :class:`~flask_wtf.FlaskForm`: the usual ``validate_on_submit()`` view
 answers htmx requests, and a mutation click without JavaScript does not
