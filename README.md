@@ -1,7 +1,7 @@
 # flask-wtforms-htmx
 
 A drop-in `FlaskForm` that brings
-[wtforms-htmx](https://github.com/yaal-coop/wtforms-htmx) to
+[wtforms-htmx](https://wtforms-htmx.readthedocs.io/) to
 [Flask-WTF](https://flask-wtf.readthedocs.io/).
 
 **Status: alpha, work in progress.**

@@ -66,7 +66,7 @@ html_context = {
             "Issue Tracker",
             "https://github.com/yaal-coop/flask-wtforms-htmx/issues/",
         ),
-        ProjectLink("wtforms-htmx (core)", "https://wtforms-htmx.readthedocs.io/"),
+        ProjectLink("wtforms-htmx", "https://wtforms-htmx.readthedocs.io/"),
     ],
 }
 html_sidebars = {
